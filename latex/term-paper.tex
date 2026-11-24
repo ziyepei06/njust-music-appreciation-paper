@@ -1,0 +1,330 @@
+% !TEX program = xelatex
+% =============================================================================
+% 学期论文模板（LaTeX 版）—— 依据《学期论文模板（终）.doc》复刻
+% 编译：xelatex term-paper.tex  （连编两遍）
+% =============================================================================
+\documentclass[
+  zihao     = -4,          % 正文小四（12 bp）
+  linespread = 1.625,      % 1.5 倍行距（Word 的 1.5 倍 = 1.3em 行高 ×1.5）
+  twoside,                 % 双面打印：左右页边距与页眉页码对称
+  fontset   = mac          % macOS；Windows 改 windows，Overleaf 改 fandol
+]{ctexart}
+
+% -----------------------------------------------------------------------------
+% 1. 版面：左右各 2 cm、上下 2.54 cm，页眉在正文上方并带一条横线
+% -----------------------------------------------------------------------------
+\usepackage[a4paper,
+  left = 2cm, right = 2cm, top = 2.54cm, bottom = 2.54cm,
+  headheight = 14pt, headsep = 0.55cm,
+  footskip = 1.0cm]{geometry}
+
+\usepackage{graphicx}      % 插图
+\usepackage{float}         % [H] 让图表就地排（模板要求图随文走）
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}  % [H] 图表的上下留白，贴近模板的 0.5 行
+\usepackage{booktabs}      % 三线表
+\usepackage{array}
+\usepackage{caption}       % 题注
+\usepackage{fancyhdr}      % 页眉页码
+\usepackage{amsmath}       % 公式
+\usepackage{tikz}          % 封面绝对定位
+\usepackage[hidelinks]{hyperref}
+\hyphenpenalty=10000 \exhyphenpenalty=10000  % 西文不自动断词（与 Word 一致）
+\tolerance=2000
+
+% 字体：西文 Times New Roman，无衬线 Arial（模拟黑体的西文部分）
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+% 中文字体与 Word 模板一致：正文宋体 SimSun、黑体 SimHei、封面填写栏楷体 KaiTi_GB2312
+\setCJKmainfont{SimSun}[AutoFakeBold=2.5]
+\setCJKsansfont{SimHei}[AutoFakeBold=2.5]
+\setCJKfamilyfont{zhsong}{SimSun}[AutoFakeBold=2.5]
+\setCJKfamilyfont{zhhei}{SimHei}[AutoFakeBold=2.5]
+\setCJKfamilyfont{zhkai}{KaiTi_GB2312}[AutoFakeBold=2.5]
+\newfontfamily\kaitilatin{KaiTi_GB2312}
+\newfontfamily\titlenr{Times New Roman}   % 封面题目里的英文单词
+% 黑体没有粗体字重，用 xeCJK 的伪粗体（与 Word 对 SimHei 加粗的处理相同）
+\xeCJKsetup{AutoFakeBold=2.5}
+
+% 关闭“中文与西文/数字之间的自动空隙”，使「图2.1」「12pt」与原 Word 模板一致
+\AtBeginDocument{\xeCJKsetup{CJKecglue={}}}
+
+% -----------------------------------------------------------------------------
+% 2. 页眉：奇数页页码靠右、偶数页页码靠左（双面打印），下方一条横线；
+%    封面与摘要页不显示页码，正文从 1 开始编号
+% -----------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO]{\zihao{5}\thepage}
+\fancyhead[LE]{\zihao{5}\thepage}
+\renewcommand{\headrulewidth}{0.8pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{nohead}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}}
+\fancypagestyle{ruleonly}{\fancyhf{}\renewcommand{\headrulewidth}{0.8pt}}
+
+% -----------------------------------------------------------------------------
+% 3. 论文信息：只改这里
+% -----------------------------------------------------------------------------
+\newcommand{\papertitlezh}{}
+\newcommand{\papertitleen}{}
+\newcommand{\paperauthor}{}
+\newcommand{\paperid}{}
+\newcommand{\papercollege}{}
+\newcommand{\papermajor}{}
+\newcommand{\paperadvisor}{}
+\newcommand{\paperdate}{二〇二六年十月}
+
+% -----------------------------------------------------------------------------
+% 4. 标题格式：一级小三黑体加粗（段前后各 0.5 行）、二级四号黑体、三级小四黑体
+% -----------------------------------------------------------------------------
+\ctexset{
+  section = {
+    format     = {\heiti\sffamily\zihao{-3}\bfseries\raggedright},
+    name       = {,},
+    number     = \arabic{section},
+    aftername  = \hspace{1em},
+    beforeskip = 0.26cm,
+    afterskip  = 0.23cm,
+  },
+  subsection = {
+    format     = {\heiti\sffamily\zihao{4}\bfseries\raggedright},
+    number     = \arabic{section}.\arabic{subsection},
+    aftername  = \hspace{1em},
+    beforeskip = 0pt,
+    afterskip  = 0.07cm,
+  },
+  subsubsection = {
+    format     = {\heiti\sffamily\zihao{-4}\bfseries\raggedright},
+    number     = \arabic{section}.\arabic{subsection}.\arabic{subsubsection},
+    aftername  = \hspace{1em},
+    beforeskip = 0pt,
+    afterskip  = 0pt,
+    runin      = false,
+  },
+}
+
+% -----------------------------------------------------------------------------
+% 5. 图表题注：图题在图下、表题在表上，五号黑体居中，按章编号
+% -----------------------------------------------------------------------------
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+
+\DeclareCaptionFont{capfont}{\zihao{5}\heiti\sffamily}
+\makeatletter
+\renewcommand{\fnum@figure}{\figurename\thefigure}
+\renewcommand{\fnum@table}{\tablename\thetable}
+\makeatother
+\captionsetup{
+  font          = capfont,
+  labelsep      = quad,
+  justification = centering,
+  skip          = 8pt,
+}
+\captionsetup[table]{position=top, skip=6pt}
+\captionsetup[figure]{position=bottom, skip=6pt}
+
+% -----------------------------------------------------------------------------
+% 6. 封面
+% -----------------------------------------------------------------------------
+\newcommand{\papertitlecoverzh}{}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{nohead}
+\begin{tikzpicture}[remember picture, overlay]
+  \coordinate (NW) at (current page.north west);
+
+  % 校徽（居中，宽 7.4 cm）
+  \node[anchor=north west, inner sep=0] at ([xshift=6.8cm,yshift=-4.58cm]NW)
+    {\includegraphics[width=7.4cm]{logo.png}};
+
+  % “学 期 论 文”：53 bp 黑体加粗，字间拉开
+  % 原 .doc 这一行是居中（text-align:center），按版心居中放置
+  \node[anchor=base, inner sep=0] at ([xshift=10.5cm,yshift=-8.89cm]NW)
+    {\heiti\bfseries\fontsize{53}{63}\selectfont
+     学\hspace{1em}期\hspace{1em}论\hspace{1em}文};
+
+  % ---- 作者、学号 ----
+  \node[anchor=base west, inner sep=0] at ([xshift=3.67cm,yshift=-12.95cm]NW)
+    {\zihao{3}\songti\bfseries 作\hspace{0.7cm}者：};
+  \node[anchor=base west, inner sep=0] at ([xshift=10.16cm,yshift=-12.95cm]NW)
+    {\zihao{3}\songti\bfseries 学\hspace{0.28cm}号：};
+  \draw[line width=0.8pt] ([xshift=5.96cm,yshift=-13.14cm]NW) -- ([xshift=9.97cm,yshift=-13.14cm]NW);
+  \draw[line width=0.8pt] ([xshift=12.19cm,yshift=-13.14cm]NW) -- ([xshift=16.08cm,yshift=-13.14cm]NW);
+  \node[anchor=base, inner sep=0] at ([xshift=7.97cm,yshift=-12.95cm]NW)
+    {\zihao{3}\kaishu\kaitilatin \paperauthor};
+  \node[anchor=base, inner sep=0] at ([xshift=14.14cm,yshift=-12.95cm]NW)
+    {\zihao{3}\kaishu\kaitilatin \paperid};
+
+  % ---- 学院 ----
+  \node[anchor=base west, inner sep=0] at ([xshift=3.67cm,yshift=-14.34cm]NW)
+    {\zihao{3}\songti\bfseries 学\hspace{0.7cm}院：};
+  \draw[line width=0.8pt] ([xshift=5.96cm,yshift=-14.52cm]NW) -- ([xshift=16.09cm,yshift=-14.52cm]NW);
+  \node[anchor=base, inner sep=0] at ([xshift=11.02cm,yshift=-14.34cm]NW)
+    {\zihao{3}\kaishu\kaitilatin \papercollege};
+
+  % ---- 专业 ----
+  \node[anchor=base west, inner sep=0] at ([xshift=3.67cm,yshift=-15.72cm]NW)
+    {\zihao{3}\songti\bfseries 专\hspace{0.7cm}业：};
+  \draw[line width=0.8pt] ([xshift=5.96cm,yshift=-15.91cm]NW) -- ([xshift=16.09cm,yshift=-15.91cm]NW);
+  \node[anchor=base, inner sep=0] at ([xshift=11.02cm,yshift=-15.72cm]NW)
+    {\zihao{3}\kaishu\kaitilatin \papermajor};
+
+  % ---- 题目（较长时可写两行，占两条横线）----
+  \node[anchor=base west, inner sep=0] at ([xshift=3.67cm,yshift=-17.11cm]NW)
+    {\zihao{3}\songti\bfseries 题\hspace{0.7cm}目：};
+  \draw[line width=0.8pt] ([xshift=5.96cm,yshift=-17.29cm]NW) -- ([xshift=16.09cm,yshift=-17.29cm]NW);
+  \draw[line width=0.8pt] ([xshift=5.96cm,yshift=-18.68cm]NW) -- ([xshift=16.09cm,yshift=-18.68cm]NW);
+  % 题目占两行：每一行都坐在一条横线上，行距与横线间距一致（1.39 cm）
+  \node[anchor=base west, inner sep=0] at ([xshift=5.96cm,yshift=-18.54cm]NW)
+    {\parbox[b]{10.13cm}{\centering\kaishu\kaitilatin\fontsize{16}{24.25}\selectfont
+       \papertitlecoverzh}};
+
+  % ---- 指导者 ----
+  \node[anchor=base west, inner sep=0] at ([xshift=4.13cm,yshift=-21.39cm]NW)
+    {\zihao{3}\songti\bfseries 指导者：};
+  \draw[line width=0.8pt] ([xshift=6.26cm,yshift=-21.51cm]NW) -- ([xshift=15.01cm,yshift=-21.51cm]NW);
+  \node[anchor=base, inner sep=0] at ([xshift=10.63cm,yshift=-21.39cm]NW)
+    {\zihao{3}\kaishu\kaitilatin \paperadvisor};
+
+  % ---- 年月 ----
+  \node[anchor=base, inner sep=0] at ([xshift=10.5cm,yshift=-22.72cm]NW)
+    {\zihao{-2}\heiti \paperdate};
+
+  % ---- 得分框（任课教师填写）----
+  \draw[line width=0.8pt] ([xshift=13.63cm,yshift=-24.76cm]NW) rectangle ([xshift=18.46cm,yshift=-26.62cm]NW);
+  \node[anchor=base west, inner sep=0] at ([xshift=13.91cm,yshift=-26.03cm]NW)
+    {\zihao{1}\songti 得分：};
+\end{tikzpicture}
+\end{titlepage}
+
+% -----------------------------------------------------------------------------
+% 7. 第 2 页：题目、摘要、关键词（不编页码）
+% -----------------------------------------------------------------------------
+\thispagestyle{nohead}
+
+% 摘要页外框：与模板一致（2.14–18.88 × 2.87–26.25 cm，0.75 pt）。
+% 不想要这圈框就删掉下面的 tikzpicture。
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[line width=0.75pt]
+    ([xshift=2.14cm,yshift=-2.87cm]current page.north west)
+    rectangle
+    ([xshift=18.88cm,yshift=-26.25cm]current page.north west);
+  % Title 下的横线
+  \draw[line width=0.8pt]
+    ([xshift=3.98cm,yshift=-4.95cm]current page.north west) --
+    ([xshift=18.67cm,yshift=-4.95cm]current page.north west);
+\end{tikzpicture}
+
+% 模板第 2 页的文字比正文版心再内缩约 0.35 cm（文字在框内留白）
+\begingroup
+\leftskip=0.35cm \rightskip=0.35cm
+
+\vspace*{1.0cm}
+\noindent{\heiti\sffamily\zihao{3}\bfseries Title}\hfill{\zihao{4}\linespread{1.2}\selectfont \papertitlezh}\hspace*{\fill}\par
+
+\vspace{2.2cm}
+\noindent{\heiti\sffamily\zihao{3}\bfseries Abstract}\par
+\noindent This paragraph is a placeholder for the abstract, which should state the research question, the method, the main findings and their significance, and is normally 150--250 words long. The text is set in 12\,pt Times New Roman with 1.5 line spacing and no first-line indent.\par
+
+\vspace{2\baselineskip}
+\noindent{\heiti\sffamily\zihao{-4}\bfseries Keywords：}\par
+\endgroup
+
+\clearpage
+\pagenumbering{arabic}
+
+% -----------------------------------------------------------------------------
+% 8. 正文
+% -----------------------------------------------------------------------------
+\section{引言}
+
+此处为正文示例，用来检查正文字号、行距与首行缩进。正文使用小四号字（12\,pt），1.5 倍行距，每段首行缩进两个汉字；西文字符使用 Times New Roman，中文使用宋体。正文中的量的符号用斜体，如速度 $v$、密度 $\rho$；单位符号用正体，如 m/s、kg/m$^3$。
+
+\subsection{研究对象与方法}
+
+此处为二级节标题下的正文。二级标题为四号黑体，段前、段后各 0.5 行。本节可交代研究对象、资料来源与分析方法。
+
+\subsubsection{资料说明}
+
+此处为三级条标题下的正文。三级标题为小四号黑体，单独成行。三级标题一般用于更细的层次，正文仍为小四号宋。
+
+\section{示例章节}
+
+本节演示图、表、公式与交叉引用的写法。图~\ref{fig:demo} 演示了图的排版：图题位于图下，五号黑体居中，图序号按章编排。
+
+\begin{figure}[H]
+  \centering
+  \fbox{\begin{minipage}[c][3.2cm][c]{11cm}
+    \centering\zihao{5}
+    插图占位\\[2pt]
+    替换为 \texttt{\textbackslash includegraphics} 插入的图片
+  \end{minipage}}
+  \caption{示例图题（五号黑体，居中，图题在图下）}
+  \label{fig:demo}
+\end{figure}
+
+表~\ref{tab:demo} 演示三线表的写法：表题位于表上方，五号黑体居中；表中文字五号宋体，西文用 Times New Roman；表格只用顶线、栏目线和底线，顶线与底线可略粗。
+
+\begin{table}[H]
+  \centering
+  \zihao{5}
+  \caption{示例三线表（五号黑体，居中，表题在表上）}
+  \label{tab:demo}
+  \begin{tabular}{lccc}
+    \toprule[1.5pt]
+    类别 & 指标一 & 指标二 & 指标三 \\
+    \midrule[0.75pt]
+    第一类 & 12.3 & 45.6 & 78.9 \\
+    第二类 & 23.4 & 56.7 & 89.1 \\
+    第三类 & 34.5 & 67.8 & 91.2 \\
+    \bottomrule[1.5pt]
+  \end{tabular}
+\end{table}
+
+需要公式时可直接书写，例如
+\begin{equation}
+  E = mc^{2},
+  \label{eq:demo}
+\end{equation}
+其中 $E$ 为能量，$m$ 为质量，$c$ 为光速。公式编号可按章编排，引用时写作式~\eqref{eq:demo}。
+
+\subsection{小结}
+
+本节小结示例。正文各页格式统一，不另加装饰。
+
+% -----------------------------------------------------------------------------
+% 9. 参考文献
+% -----------------------------------------------------------------------------
+\clearpage   % References 另起一页
+\thispagestyle{ruleonly}   % 保留页眉横线，不排页码
+\begingroup
+\renewcommand{\refname}{References}
+\ctexset{section/format={\centering\heiti\zihao{-3}}, section/afterskip=1.1cm}
+\vspace*{0.86cm}
+\begin{thebibliography}{99}
+  \fontsize{12}{18}\linespread{1}\selectfont
+  \setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}\setlength{\topsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \bibitem{a1} Author, A. Title of the article[J]. \textit{Journal Name}, 2020, 12(3): 45--67.
+  \bibitem{a2} Author, B. \textit{Title of the Book}[M]. City: Publisher, 2019: 12--34.
+  \bibitem{a3} 作者. 文献题名[J]. 期刊名称, 2021, 33(2): 56--78.
+\end{thebibliography}
+\endgroup
+
+% -----------------------------------------------------------------------------
+% 10. 附录（如无附录，整段删除）
+% -----------------------------------------------------------------------------
+\clearpage
+\appendix
+\ctexset{
+  section/name       = {Appendix\ },
+  section/number     = \Alph{section},
+  section/format     = {\heiti\zihao{-3}\raggedright},
+}
+\renewcommand{\thesection}{\Alph{section}}
+\section{示例附录}
+
+附录另起一页，标题为小三号黑体。此处填写补充材料、调查问卷、完整数据表等内容。如无附录，删除本页及上一节的附录设置即可。
+
+\end{document}
