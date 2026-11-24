@@ -21,3 +21,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# 编译产物（不随仓库分发）
+latex/term-paper.pdf

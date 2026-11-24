@@ -16,7 +16,6 @@
 │   └── 官方导出示例.pdf          # 原模版导出成 PDF 的效果（对照用）
 ├── latex/
 │   ├── term-paper.tex            # LaTeX 模板源文件（留空版）
-│   ├── term-paper.pdf            # 编译结果
 │   └── logo.png                  # 封面校徽（从 .doc 中提取）
 ├── docs/
 │   └── 作业要求.md                # 课程作业要求与格式要点
@@ -35,6 +34,8 @@ cd latex
 xelatex term-paper.tex
 xelatex term-paper.tex   # 第二遍处理交叉引用与页码
 ```
+
+编译后在同目录生成 `term-paper.pdf`（仓库里不附带编译产物，请自行生成）。
 
 或：
 
