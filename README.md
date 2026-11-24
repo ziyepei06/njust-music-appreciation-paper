@@ -18,6 +18,8 @@
 │   ├── term-paper.tex            # LaTeX 模板源文件（留空版）
 │   ├── term-paper.pdf            # 编译结果
 │   └── logo.png                  # 封面校徽（从 .doc 中提取）
+├── docs/
+│   └── 作业要求.md                # 课程作业要求与格式要点
 └── README.md
 ```
 
